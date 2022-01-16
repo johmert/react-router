@@ -6,7 +6,8 @@ import {
   Route, 
   Switch,
   useLocation,
-  useParams } from "react-router-dom";
+  useParams,
+  useHistory } from "react-router-dom";
 
 function Home() {
   return <p>Home</p>
@@ -51,6 +52,33 @@ function UserProfile() {
   return "Loading...";
 }
 
+function BackButton() {
+  const history = useHistory();
+  return (
+    <button type="button" onClick={() => history.goBack()}>
+      Go Back
+    </button>
+  );
+}
+
+function ForwardButton() {
+  const history = useHistory();
+  return (
+    <button type="button" onClick={() => history.goForward()}>
+      Go Forward
+    </button>
+  );
+}
+
+function GoHomeButton() {
+  const history = useHistory();
+  return (
+    <button type="button" onClick={() => history.push("/")}>
+      Go Home (Better than a Link!)
+    </button>
+  );
+}
+
 function App() {
   return (
     <Router>
@@ -58,6 +86,11 @@ function App() {
         <div>
           <Link to="/" className="link">Home</Link>
           <Link to="/about" className="link">About</Link>
+          <div>
+            <BackButton/>
+            <GoHomeButton/>
+            <ForwardButton/>
+          </div>
         </div>
         {Array(10)
           .fill()
