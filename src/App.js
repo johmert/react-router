@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './App.css';
 import { 
   BrowserRouter as Router,
   Link, 
   Route, 
   Switch,
-  useLocation } from "react-router-dom";
+  useLocation,
+  useParams } from "react-router-dom";
 
 function Home() {
   return <p>Home</p>
@@ -24,19 +25,57 @@ function NoMatch() {
   );
 }
 
+function UserProfile() {
+  const [user, setUser] = useState({});
+  
+  const userId = useParams().userId;
+  useEffect(() => {
+    async function loadUser() {
+      const response = await fetch(
+        `https://jsonplaceholder.typicode.com/users/${userId}`
+      );
+      const userFromAPI = await response.json();
+      setUser(userFromAPI);
+    }
+    loadUser();
+  }, [userId]);
+  
+  if(user.id) {
+    return Object.entries(user).map(([key, value]) => (
+      <div key={key}>
+        <label>{key}</label> : {JSON.stringify(value)}
+        <hr/>
+      </div>
+    ));
+  }
+  return "Loading...";
+}
 
 function App() {
   return (
     <Router>
       <div className="App">
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
+        <div>
+          <Link to="/" className="link">Home</Link>
+          <Link to="/about" className="link">About</Link>
+        </div>
+        {Array(10)
+          .fill()
+          .map((ignoredValue, index) => index + 1)
+          .map((id) => (
+            <div key={id}>
+              <Link to={`/user/${id}`}>User {id}</Link>
+            </div>
+          ))}
         <Switch>
           <Route exact={true} path="/">
             <Home />
           </Route>
           <Route path="/about">
             <About />
+          </Route>
+          <Route path="/user/:userId">
+            <UserProfile />
           </Route>
           <Route>
             <NoMatch />

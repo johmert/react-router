@@ -1,9 +1,12 @@
 .App {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  line-height: 2;
+  line-height: 2.3;
   text-align: center;
+}
+
+.link {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
 }
 
 p {
